@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasosa Skateshop</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: rgb(255, 255, 255) url('https://cdn.discordapp.com/attachments/1164229778761588807/1260324048055959655/Screenshot_20240709_215722.jpg?ex=668ee7bc&is=668d963c&hm=cd83ca07cd417a1fbd7ccc7dda65d7ddb39e0d9088bc2605a70e2074d01c2a14&') no-repeat center center fixed;
+            background-size: 100%; /* Ensure the background covers the entire screen */
+            color: #000; /* Changed text color to black for visibility on white background */
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.5); /* Changed overlay to a light color */
+            padding: 50px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .menu {
+            position: fixed;
+            top: 40%; /* Adjusted to move the menu tab a bit higher */
+            right: 20px;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .menu a {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .menu a:hover {
+            background: #ff6f61;
+            border-radius: 5px;
+        }
+        .shop-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+            padding-top: 775px;
+        }
+        .product {
+            background: white;
+            color: black;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 150px; /* Reduced the width of the product */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .product img.product-img {
+            width: 100px; /* Adjust the width as per your preference */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 10px; /* Optional: Rounded corners */
+        }
+        .product h2 {
+            font-size: 18px; /* Reduced the font size of the product name */
+            margin: 10px 0;
+            color: #ff6f61;
+        }
+        .product p {
+            font-size: 14px; /* Reduced the font size of the product price */
+            color: #555;
+        }
+        .product button {
+            padding: 8px 16px; /* Reduced the padding of the button */
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .product button:hover {
+            background-color: #e65b4f;
+        }
+        /* Style for the shopping cart button */
+        .shopping-cart {
+            position: fixed;
+            top: 29%; /* Adjusted to move the menu tab a bit higher */
+            right: 20px;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            z-index: 999; /* Ensure it's above other content */
+        }
+        .shopping-cart button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .shopping-cart button:hover {
+            background-color: #e65b4f;
+        }
+        .shopping-cart img {
+            width: 50px; /* Adjust size as needed */
+            height: auto;
+            margin-right: 10px;
+        }
+        /* Style for the modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000; /* Ensure it's above other content */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .modal-content h2 {
+            color: #ff6f61;
+        }
+        .modal-content p {
+            margin-top: 10px;
+            color: #555;
+        }
+        .modal-content button {
+            background-color: #ff6f61;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .modal-content button:hover {
+            background-color: #e65b4f;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .cart-item .item-details {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .cart-item button {
+            background-color: #e65b4f;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .cart-item button:hover {
+            background-color: #ff6f61;
+        }
+        /* Updated style for Instagram link container */
+        .instagram-container {
+            position: fixed;
+            top: 10%; /* Adjusted to be a bit lower */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000; /* Ensure it's above other content */
+            display: flex;
+            align-items: center;
+        }
+        .instagram-link {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 25px 50px; /* Increased padding to make it bigger */
+            border-radius: 10px; /* Rounded corners */
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 10px; /* Added margin for spacing */
+        }
+        .instagram-link:hover {
+            background-color: #ff6f61;
+        }
+        .instagram-img {
+            width: 75px; /* Adjusted size to match the button */
+            height: 85px; /* Adjusted size to match the button */
+            top: 25%;
+            border-radius: 10px; /* Rounded corners */
+            margin-left: 10px; /* Added margin for spacing */
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="shop-container">
+            <div class="product">
+                <img class="product-img" src="https://cdn.discordapp.com/attachments/1164229778761588807/1260330649529749656/Skjermbilde_2024-07-09_220215.png?ex=668eede2&is=668d9c62&hm=f96ede2bcdef773109b99a5166828515a4db9078f4c591c1e1452e1daeb91c82&" alt="BRETT">
+                <h2>REAL BRETT</h2>
+                <p>KR 500</p>
+                <button onclick="addToCart('REAL BRETT', 500)">Add to Cart</button>
+            </div>
+            <div class="product">
+                <img class="product-img" src="https://cdn.discordapp.com/attachments/1164229778761588807/1260350292764000348/image.png?ex=668f002d&is=668daead&hm=da24b9ef4e39e6755ba3a5a8be41027fda6f89b424f9f200a24cf3e714801753&" alt="GRIPTAPE">
+                <h2>GRIPTAPE</h2>
+                <p>KR 100</p>
+                <button onclick="addToCart('GRIPTAPE', 100)">Add to Cart</button>
+            </div>
+            <div class="product">
+                <img class="product-img" src="https://cdn.discordapp.com/attachments/1164229778761588807/1260350782600118374/image.png?ex=668f00a2&is=668daf22&hm=d4739295741207e8db62915c6d67b0d47387eefb0375d0da8f0e8dcf3081f6cc&" alt="BEARINGS">
+                <h2>BEARINGS</h2>
+                <p>KR 75</p>
+                <button onclick="addToCart('BEARINGS', 75)">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Instagram link and picture -->
+    <div class="instagram-container">
+        <a class="instagram-link" href="https://www.instagram.com/2k3_dasosa/" target="_blank">Send DM on Instagram If You Want to Buy</a>
+        <img class="instagram-img" src="https://cdn.discordapp.com/attachments/1164229778761588807/1260345234160619570/INSTA.png?ex=668efb77&is=668da9f7&hm=8b3a5520f6c1da98481ecf98567e101b96b78d105a0cdd36847f360553aa1f78&" alt="Instagram Picture">
+    </div>
+
+    <!-- Menu links -->
+    <div class="menu">
+        <a href="#home">HOME</a>
+        <a href="#shop">SHOP</a>
+        <a href="#service">SERVICE</a>
+        <a href="#contact">CONTACT</a>
+    </div>
+
+    <!-- Shopping cart button section -->
+    <div class="shopping-cart" onclick="openCart()">
+        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F004%2F999%2F463%2Foriginal%2Fshopping-cart-icon-illustration-free-vector.jpg&f=1&nofb=1&ipt=24421cae10899687ecabd0fd6c6b15fdb722f97e88acc94153ded796d55b3897&ipo=images" alt="Shopping Cart">
+    </div>
+
+    <!-- Modal for shopping cart -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <button onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        // Cart array to hold items
+        let cart = [];
+
+        // Function to add items to cart
+        function addToCart(itemName, price) {
+            // Add item to cart array
+            cart.push({ name: itemName, price: price });
+            updateCart();
+        }
+
+        // Function to update cart modal
+        function updateCart() {
+            let cartItemsContainer = document.getElementById('cartItems');
+            cartItemsContainer.innerHTML = ''; // Clear existing items
+
+            // Loop through cart items and display in the modal
+            cart.forEach((item, index) => {
+                let cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <div class="item-details">
+                        <p>${item.name} - KR ${item.price}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})">Remove</button>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+        }
+
+        // Function to remove item from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1); // Remove item from cart array
+            updateCart(); // Update cart modal
+        }
+
+        // Function to open the shopping cart modal
+        function openCart() {
+            updateCart(); // Update cart items before opening
+            document.getElementById('cartModal').style.display = 'block';
+        }
+
+        // Function to close the shopping cart modal
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        // Function to proceed to checkout (placeholder function)
+        function checkout() {
+            window.location.href = 'checkout.html'; //Redirecting to checkout page...//
+            // In a real application, you would navigate to the checkout page
+            // Replace the alert with window.location.href = 'checkout.html'; or similar
+        }
+    </script>
+</body>
+</html>

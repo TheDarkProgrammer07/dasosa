@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Dasosa Skateshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #ff6f61;
+        }
+        .order-summary {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            margin-top: 20px;
+        }
+        .order-summary h3 {
+            margin-top: 0;
+        }
+        .order-summary ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .order-summary li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .total {
+            font-weight: bold;
+        }
+        .checkout-btn {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .checkout-btn:hover {
+            background-color: #e65b4f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Checkout - Dasosa Skateshop</h2>
+
+        <!-- Customer Information Form (Placeholder) -->
+        <form id="checkoutForm">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="address">Address:</label><br>
+            <textarea id="address" name="address" rows="4" required></textarea><br><br>
+
+            <label for="phone">Phone:</label><br>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required><br><br>
+
+            <button type="submit" class="checkout-btn">Place Order</button>
+        </form>
+
+        <!-- Order Summary (Placeholder) -->
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <ul id="orderSummaryList">
+                <!-- Order items will be dynamically added here -->
+            </ul>
+            <div class="total">
+                <p>Total: <span id="orderTotal">KR 0</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch cart items from sessionStorage
+        function fetchCartItems() {
+            let cartItems = JSON.parse(sessionStorage.getItem('cart'));
+            return cartItems || [];
+        }
+
+        // Function to calculate total order amount
+        function calculateTotal(cartItems) {
+            let total = 0;
+            cartItems.forEach(item => {
+                total += item.price;
+            });
+            return total;
+        }
+
+        // Function to display order summary
+        function displayOrderSummary(cartItems, total) {
+            let orderSummaryList = document.getElementById('orderSummaryList');
+            orderSummaryList.innerHTML = '';
+
+            cartItems.forEach(item => {
+                let li = document.createElement('li');
+                li.textContent = `${item.name} - KR ${item.price}`;
+                orderSummaryList.appendChild(li);
+            });
+
+            let orderTotalElement = document.getElementById('orderTotal');
+            orderTotalElement.textContent = `KR ${total}`;
+        }
+
+        // Function to handle form submission (placeholder)
+        function handleFormSubmission(event) {
+            event.preventDefault();
+            // Here you can handle the form submission logic (e.g., sending data to backend, processing payment, etc.)
+            alert('Order placed successfully!'); // Placeholder for demonstration
+            sessionStorage.removeItem('cart'); // Clear cart after order is placed
+            window.location.href = 'index.html'; // Redirect to homepage after successful order
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let cartItems = fetchCartItems();
+            let total = calculateTotal(cartItems);
+            displayOrderSummary(cartItems, total);
+
+            let checkoutForm = document.getElementById('checkoutForm');
+            checkoutForm.addEventListener('submit', handleFormSubmission);
+        });
+    </script>
+</body>
+</html>
